@@ -5,6 +5,12 @@ import type { RefObject } from 'react';
 import TinderCard from 'react-tinder-card';
 import { SwipeCard, type Movie } from './SwipeCard';
 
+// TinderCard API type (not exported from library)
+interface TinderCardAPI {
+  swipe(dir?: 'left' | 'right' | 'up' | 'down'): Promise<void>;
+  restoreCard(): Promise<void>;
+}
+
 interface SwipeDeckProps {
   movies: Movie[];
   onSwipe: (movie: Movie, direction: 'left' | 'right') => void;
@@ -15,12 +21,12 @@ export function SwipeDeck({ movies, onSwipe, onEmpty }: SwipeDeckProps) {
   const [currentIndex, setCurrentIndex] = useState(movies.length - 1);
   const currentIndexRef = useRef(currentIndex);
   const canSwipeRef = useRef(true);
-  const childRefs = useRef<RefObject<{ swipe: (dir: 'left' | 'right') => void } | null>[]>([]);
+  const childRefs = useRef<RefObject<TinderCardAPI | null>[]>([]);
 
   useEffect(() => {
     childRefs.current = Array(movies.length)
       .fill(0)
-      .map((_, i) => childRefs.current[i] ?? createRef<{ swipe: (dir: 'left' | 'right') => void } | null>());
+      .map((_, i) => childRefs.current[i] ?? createRef<TinderCardAPI | null>());
   }, [movies.length]);
 
   // Update refs when props change
