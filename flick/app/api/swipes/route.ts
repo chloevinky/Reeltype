@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { swipes, moviesCache } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 
 // POST: Record a swipe
 export async function POST(request: NextRequest) {
@@ -64,7 +64,10 @@ export async function GET() {
         eq(swipes.direction, 'right')
       )
     )
-    .orderBy(swipes.swipedAt);
+    .orderBy(desc(swipes.swipedAt));
 
-  return NextResponse.json(mySwipes);
+  // Filter out entries where movie data is missing (in case cache was cleared)
+  const validSwipes = mySwipes.filter(s => s.title !== null);
+
+  return NextResponse.json(validSwipes);
 }

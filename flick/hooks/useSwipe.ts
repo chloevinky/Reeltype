@@ -25,13 +25,14 @@ async function recordSwipe(tmdbId: number, direction: 'left' | 'right', context 
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ tmdbId, direction, context }),
+    credentials: 'include',
   });
   if (!response.ok) throw new Error('Failed to record swipe');
   return response.json();
 }
 
 async function fetchWantToWatch() {
-  const response = await fetch('/api/swipes');
+  const response = await fetch('/api/swipes', { credentials: 'include' });
   if (!response.ok) throw new Error('Failed to fetch want-to-watch list');
   return response.json();
 }
@@ -80,7 +81,8 @@ export function useSwipeFlow({ page, onEmptyPage }: SwipeFlowOptions) {
       recordSwipe(tmdbId, direction),
     onSuccess: (_, { direction }) => {
       if (direction === 'right') {
-        queryClient.invalidateQueries({ queryKey: ['swipes', 'mine'] });
+        // Invalidate and refetch to ensure data is fresh
+        queryClient.invalidateQueries({ queryKey: ['swipes', 'mine'], refetchType: 'all' });
       }
     },
   });
@@ -103,5 +105,6 @@ export function useWantToWatch() {
   return useQuery({
     queryKey: ['swipes', 'mine'],
     queryFn: fetchWantToWatch,
+    staleTime: 0, // Always refetch when component mounts
   });
 }

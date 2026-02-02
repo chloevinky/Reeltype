@@ -77,7 +77,7 @@ export function SwipeCard({ movie, style }: SwipeCardProps) {
           </div>
         )}
         {movie.overview && (
-          <p className="text-zinc-300 text-sm line-clamp-3">
+          <p className="text-zinc-300 text-sm max-h-24 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-transparent">
             {movie.overview}
           </p>
         )}
