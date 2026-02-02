@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { swipes, moviesCache } from '@/lib/db/schema';
 import { eq, inArray } from 'drizzle-orm';
-import { discoverMovies, movieToCacheFormat } from '@/lib/tmdb';
+import { discoverMovies, getGenres } from '@/lib/tmdb';
 
 export async function GET(request: NextRequest) {
   const session = await auth();
@@ -17,6 +17,14 @@ export async function GET(request: NextRequest) {
   const minRating = parseFloat(searchParams.get('minRating') || '0');
 
   try {
+    let genreLookup = new Map<number, string>();
+    try {
+      const genreResponse = await getGenres();
+      genreLookup = new Map(genreResponse.genres.map((genre) => [genre.id, genre.name]));
+    } catch (error) {
+      console.warn('Failed to fetch genre list:', error);
+    }
+
     // Get movies from TMDB
     const tmdbResponse = await discoverMovies(page, {
       genres,
@@ -74,7 +82,9 @@ export async function GET(request: NextRequest) {
       overview: m.overview,
       releaseYear: m.release_date ? parseInt(m.release_date.split('-')[0]) : null,
       voteAverage: m.vote_average,
+      voteCount: m.vote_count,
       genres: m.genre_ids,
+      genreNames: m.genre_ids.map(id => genreLookup.get(id)).filter(Boolean),
     }));
 
     return NextResponse.json({

@@ -4,11 +4,17 @@ import { useState } from 'react';
 import { SwipeDeck } from '@/components/SwipeDeck';
 import { Navbar } from '@/components/Navbar';
 import { useSwipeFlow } from '@/hooks/useSwipe';
-import type { Movie } from '@/components/SwipeCard';
 
 export default function SwipePage() {
   const [page, setPage] = useState(1);
-  const { movies, isLoading, hasMore, handleSwipe, refetch } = useSwipeFlow(page);
+  const { movies, isLoading, hasMore, handleSwipe, refetch } = useSwipeFlow({
+    page,
+    onEmptyPage: () => {
+      if (hasMore) {
+        setPage((p) => p + 1);
+      }
+    },
+  });
 
   const loadMore = () => {
     if (hasMore) {
@@ -23,7 +29,7 @@ export default function SwipePage() {
         <div className="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
           <h1 className="text-xl font-bold text-white flex items-center gap-2">
             <span>🎬</span>
-            <span>Flick</span>
+            <span>ReelType</span>
           </h1>
           <button
             onClick={() => refetch()}

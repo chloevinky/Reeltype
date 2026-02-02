@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Flick - Find Movies Together',
+  title: 'ReelType - Find Movies Together',
   description: 'A social app where your movie taste is your profile. Swipe on movies, match with friends, and find what to watch tonight.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Flick',
+    title: 'ReelType',
   },
 };
 

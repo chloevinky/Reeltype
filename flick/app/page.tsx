@@ -51,7 +51,7 @@ export default function HomePage() {
         {/* Logo and tagline */}
         <div className="text-center mb-12">
           <div className="text-7xl mb-4">🎬</div>
-          <h1 className="text-4xl font-bold text-white mb-3">Flick</h1>
+          <h1 className="text-4xl font-bold text-white mb-3">ReelType</h1>
           <p className="text-zinc-400 text-lg max-w-xs mx-auto">
             Swipe on movies. Match with friends. Watch together.
           </p>

@@ -1,4 +1,4 @@
-# Flick — Design Plan (Vercel Edition)
+# ReelType — Design Plan (Vercel Edition)
 
 ## What It Is
 

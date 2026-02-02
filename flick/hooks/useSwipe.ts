@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { Movie } from '@/components/SwipeCard';
 
 interface SwipeResponse {
@@ -36,9 +36,15 @@ async function fetchWantToWatch() {
   return response.json();
 }
 
-export function useSwipeFlow(page: number) {
+interface SwipeFlowOptions {
+  page: number;
+  onEmptyPage?: () => void;
+}
+
+export function useSwipeFlow({ page, onEmptyPage }: SwipeFlowOptions) {
   const queryClient = useQueryClient();
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
+  const emptyPageRef = useRef<number | null>(null);
   
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['movies', 'discover', page],
@@ -47,23 +53,27 @@ export function useSwipeFlow(page: number) {
   });
 
   // Add new movies to the list when they load
-  if (data?.movies && data.movies.length > 0) {
-    const newIds = new Set(data.movies.map(m => m.tmdbId));
-    const existingIds = new Set(allMovies.map(m => m.tmdbId));
-    const hasNew = data.movies.some(m => !existingIds.has(m.tmdbId));
-    
-    if (hasNew) {
-      setAllMovies(prev => {
-        const combined = [...prev];
-        for (const movie of data.movies) {
-          if (!existingIds.has(movie.tmdbId)) {
-            combined.push(movie);
-          }
+  useEffect(() => {
+    if (!data?.movies || data.movies.length === 0) return;
+    setAllMovies(prev => {
+      const existingIds = new Set(prev.map(m => m.tmdbId));
+      const combined = [...prev];
+      for (const movie of data.movies) {
+        if (!existingIds.has(movie.tmdbId)) {
+          combined.push(movie);
         }
-        return combined;
-      });
-    }
-  }
+      }
+      return combined;
+    });
+  }, [data?.movies]);
+
+  useEffect(() => {
+    if (!data || allMovies.length > 0) return;
+    if (data.movies.length > 0 || !data.hasMore) return;
+    if (emptyPageRef.current === data.page) return;
+    emptyPageRef.current = data.page;
+    onEmptyPage?.();
+  }, [data, allMovies.length, onEmptyPage]);
 
   const swipeMutation = useMutation({
     mutationFn: ({ tmdbId, direction }: { tmdbId: number; direction: 'left' | 'right' }) =>
