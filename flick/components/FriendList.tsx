@@ -7,7 +7,7 @@ import { getInitials } from '@/lib/utils';
 interface Friend {
   id: string;
   name: string | null;
-  email: string | null;
+  username: string | null;
   image: string | null;
 }
 
@@ -51,7 +51,7 @@ export function FriendList({ friendships, onAccept, onDecline, isLoading }: Frie
                 <Avatar user={friendship.friend} />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-white truncate">
-                    {friendship.friend?.name || friendship.friend?.email || 'Unknown'}
+                    {friendship.friend?.name || friendship.friend?.username || 'Unknown'}
                   </p>
                   <p className="text-sm text-zinc-500">Wants to be friends</p>
                 </div>
@@ -90,7 +90,7 @@ export function FriendList({ friendships, onAccept, onDecline, isLoading }: Frie
                 <Avatar user={friendship.friend} />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-white truncate">
-                    {friendship.friend?.name || friendship.friend?.email || 'Unknown'}
+                    {friendship.friend?.name || friendship.friend?.username || 'Unknown'}
                   </p>
                   <p className="text-sm text-zinc-500">Request sent</p>
                 </div>
@@ -116,7 +116,7 @@ export function FriendList({ friendships, onAccept, onDecline, isLoading }: Frie
                 <Avatar user={friendship.friend} />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-white truncate">
-                    {friendship.friend?.name || friendship.friend?.email || 'Unknown'}
+                    {friendship.friend?.name || friendship.friend?.username || 'Unknown'}
                   </p>
                 </div>
                 <svg className="w-5 h-5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

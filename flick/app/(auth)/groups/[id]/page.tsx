@@ -16,7 +16,7 @@ interface GroupPageProps {
 interface Member {
   userId: string;
   name: string | null;
-  email: string | null;
+  username: string | null;
   image: string | null;
   joinedAt: string;
 }
@@ -118,7 +118,7 @@ export default function GroupPage({ params }: GroupPageProps) {
                 <div
                   key={member.userId}
                   className="relative"
-                  title={member.name || member.email || 'Member'}
+                  title={member.name || member.username || 'Member'}
                 >
                   {member.image ? (
                     <Image

@@ -41,7 +41,7 @@ export async function GET() {
         columns: {
           id: true,
           name: true,
-          email: true,
+          username: true,
           image: true,
         },
       });

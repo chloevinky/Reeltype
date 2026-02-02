@@ -67,7 +67,7 @@ export default function TonightPage() {
               <option value="">Select a friend</option>
               {acceptedFriends.map((friendship) => (
                 <option key={friendship.id} value={friendship.friend?.id}>
-                  {friendship.friend?.name || friendship.friend?.email}
+                  {friendship.friend?.name || friendship.friend?.username}
                 </option>
               ))}
             </select>

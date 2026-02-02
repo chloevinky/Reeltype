@@ -40,7 +40,7 @@ export async function GET(
       userId: groupMembers.userId,
       joinedAt: groupMembers.joinedAt,
       name: users.name,
-      email: users.email,
+      username: users.username,
       image: users.image,
     })
     .from(groupMembers)
