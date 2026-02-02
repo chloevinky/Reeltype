@@ -36,7 +36,7 @@ interface WatchHistoryItem {
 }
 
 async function fetchFriendMatches(friendId: string): Promise<Match[]> {
-  const response = await fetch(`/api/friends/${friendId}/matches`);
+  const response = await fetch(`/api/matches/friend/${friendId}`);
   if (!response.ok) throw new Error('Failed to fetch matches');
   return response.json();
 }

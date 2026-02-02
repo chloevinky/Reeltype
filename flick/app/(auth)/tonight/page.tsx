@@ -18,7 +18,7 @@ export default function TonightPage() {
     queryKey: ['matches', 'friend', selectedFriendId],
     queryFn: async () => {
       if (!selectedFriendId) return [];
-      const response = await fetch(`/api/friends/${selectedFriendId}/matches`);
+      const response = await fetch(`/api/matches/friend/${selectedFriendId}`);
       if (!response.ok) throw new Error('Failed to fetch matches');
       return response.json();
     },
