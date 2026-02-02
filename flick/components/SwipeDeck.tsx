@@ -15,12 +15,12 @@ export function SwipeDeck({ movies, onSwipe, onEmpty }: SwipeDeckProps) {
   const [currentIndex, setCurrentIndex] = useState(movies.length - 1);
   const currentIndexRef = useRef(currentIndex);
   const canSwipeRef = useRef(true);
-  const childRefs = useRef<Array<RefObject<{ swipe: (dir: 'left' | 'right') => void }> | null>>([]);
+  const childRefs = useRef<RefObject<{ swipe: (dir: 'left' | 'right') => void } | null>[]>([]);
 
   useEffect(() => {
     childRefs.current = Array(movies.length)
       .fill(0)
-      .map((_, i) => childRefs.current[i] ?? createRef());
+      .map((_, i) => childRefs.current[i] ?? createRef<{ swipe: (dir: 'left' | 'right') => void } | null>());
   }, [movies.length]);
 
   // Update refs when props change
