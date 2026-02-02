@@ -64,13 +64,23 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { userId, email } = await request.json();
+  const { userId, email, username } = await request.json();
   let targetUserId = userId;
 
-  // If email provided instead of userId, look up the user
-  if (email && !userId) {
+  // If username provided, look up the user by username
+  if (username && !userId) {
     const user = await db.query.users.findFirst({
-      where: eq(users.email, email),
+      where: eq(users.username, username.toLowerCase()),
+    });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+    targetUserId = user.id;
+  }
+  // If email provided instead of userId, look up the user (fallback)
+  else if (email && !userId) {
+    const user = await db.query.users.findFirst({
+      where: eq(users.username, email.toLowerCase()),
     });
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

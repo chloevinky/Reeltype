@@ -31,11 +31,12 @@ export async function POST(
     return NextResponse.json({ error: 'You are not a member of this group' }, { status: 403 });
   }
 
-  // Find the user to add
+  // Find the user to add (by username since we use username+pin auth)
   let targetUserId = userId;
   if (email && !userId) {
+    // Treat email as username for username+pin auth
     const user = await db.query.users.findFirst({
-      where: eq(users.email, email),
+      where: eq(users.username, email.toLowerCase()),
     });
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

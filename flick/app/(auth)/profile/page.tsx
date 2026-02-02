@@ -1,7 +1,6 @@
 'use client';
 
 import { useSession, signOut } from 'next-auth/react';
-import Image from 'next/image';
 import { Navbar } from '@/components/Navbar';
 import { MovieList } from '@/components/MovieCard';
 import { useWantToWatch } from '@/hooks/useSwipe';
@@ -16,6 +15,8 @@ export default function ProfilePage() {
   const handleSignOut = () => {
     signOut({ callbackUrl: '/' });
   };
+
+  const username = (session?.user as any)?.username || session?.user?.name;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 to-zinc-900">
@@ -37,25 +38,15 @@ export default function ProfilePage() {
         <div className="max-w-lg mx-auto">
           {/* User info */}
           <div className="flex items-center gap-4 mb-8">
-            {session?.user?.image ? (
-              <Image
-                src={session.user.image}
-                alt={session.user.name || 'Profile'}
-                width={64}
-                height={64}
-                className="rounded-full"
-              />
-            ) : (
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold text-xl">
-                {getInitials(session?.user?.name)}
-              </div>
-            )}
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold text-xl">
+              {getInitials(username)}
+            </div>
             <div>
               <h2 className="text-xl font-bold text-white">
-                {session?.user?.name || 'Movie Lover'}
+                {username || 'Movie Lover'}
               </h2>
               <p className="text-zinc-400">
-                {session?.user?.email || 'Flick member'}
+                @{username || 'flick_user'}
               </p>
             </div>
           </div>

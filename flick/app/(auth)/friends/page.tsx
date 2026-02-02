@@ -60,10 +60,10 @@ export default function FriendsPage() {
             <h2 className="text-xl font-bold text-white mb-4">Add Friend</h2>
             <form onSubmit={handleSendRequest}>
               <input
-                type="email"
+                type="text"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Friend's email address"
+                onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                placeholder="Friend's username"
                 className="w-full px-4 py-3 bg-zinc-800 text-white placeholder-zinc-500 rounded-xl border border-zinc-700 focus:border-emerald-500 focus:outline-none"
                 required
               />
